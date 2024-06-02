@@ -1,10 +1,7 @@
 # Nuxt 3 Minimal Starter
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
-
+Instalar o Nuxt e suas dependências
 ## Setup
-
-Make sure to install the dependencies:
 
 ```bash
 # npm
@@ -22,7 +19,7 @@ bun install
 
 ## Development Server
 
-Start the development server on `http://localhost:3000`:
+Iniciar o servidor de desenvolvimento (localhost:3000)
 
 ```bash
 # npm
@@ -38,38 +35,12 @@ yarn dev
 bun run dev
 ```
 
-## Production
+Inicializar o banco de dados (localhost:4000)
 
-Build the application for production:
+node server.js
 
-```bash
-# npm
-npm run build
+Utilizar o banco de dados
 
-# pnpm
-pnpm run build
+sqlite3 databse.db
 
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Caso houver alguma alteração no tabela_banco.csv, executar arquivo saveSql.py, que atualizará o arquivo database.db

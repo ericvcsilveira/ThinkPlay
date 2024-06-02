@@ -5,7 +5,7 @@ import pandas as pd
 csv_file = 'thinkplay/tabela_banco.csv'
 
 # Nome do banco de dados SQLite
-sqlite_db = 'thinkplay/meu_banco_de_dados.db'
+sqlite_db = 'thinkplay/database.db'
 
 # Nome da tabela no banco de dados
 table_name = 'indicadores'

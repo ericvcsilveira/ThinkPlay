@@ -10,7 +10,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Conexão com o banco de dados SQLite
-const db = new sqlite3.Database('./meu_banco_de_dados.db', (err) => {
+const db = new sqlite3.Database('./database.db', (err) => {
     if (err) {
         console.error('Erro ao conectar ao banco de dados:', err.message);
     } else {
