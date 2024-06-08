@@ -28,7 +28,7 @@
         <div class="mb-6">
           <h3 class="text-2xl font-bold text-gray-800">Indicadores de GLA</h3>
           <p class="text-lg text-gray-700">
-            Indicadores de GLA são métricas específicas que ajudam a monitorar e avaliar o desempenho dos jogadores, bem como a eficácia dos elementos educacionais dentro do jogo. Esses indicadores podem incluir registros temporais, ações específicas dos jogadores e estados contextuais, fornecendo uma visão detalhada do progresso e das necessidades dos alunos. Nessa ferramenta, você encontrará diversos indicadores divididos em categorias, acompanhados de diversas diretrizes a seu respeito.
+            Indicadores de GLA são métricas específicas que ajudam a monitorar e avaliar o desempenho dos jogadores, bem como a eficácia dos elementos educacionais dentro do jogo. Esses indicadores podem incluir registros temporais, ações específicas dos jogadores, entre outros, fornecendo uma visão do progresso e das necessidades dos alunos. Nessa ferramenta, você encontrará indicadores divididos em categorias, acompanhados de diretrizes a seu respeito.
           </p>
         </div>
   

@@ -18,21 +18,21 @@
 
         <!-- Atributos do indicador -->
         <div class="mb-6 p-4 border-b border-gray-200 last:border-none">
-          <h4 class="text-lg font-semibold text-black mb-1">Definição:</h4>
-          <p class="text-gray-700">{{ response[0].definicao }}</p>
+          <h4 class="text-xl font-semibold text-black mb-1">Definição:</h4>
+          <p class="text-gray-700 text-lg">{{ response[0].definicao }}</p>
         </div>
 
         <div class="mb-6 p-4 border-b border-gray-200 last:border-none">
-          <h4 class="text-lg font-semibold text-black mb-1">Aplicações práticas:</h4>
+          <h4 class="text-xl  font-semibold text-black mb-1">Aplicações práticas:</h4>
           <ul class="text-gray-700 list-disc ml-5">
-            <li v-for="item in splitValues(response[0].aplicacoes_praticas)" :key="item">{{ item }}</li>
+            <li class="text-lg" v-for="item in splitValues(response[0].aplicacoes_praticas)" :key="item">{{ item }}</li>
           </ul>
         </div>
 
         <div class="mb-6 p-4 border-b border-gray-200 last:border-none">
-          <h4 class="text-lg font-semibold text-black mb-1">Como pode ser implementado:</h4>
+          <h4 class="text-xl  font-semibold text-black mb-1">Como pode ser implementado:</h4>
           <ul class="text-gray-700 ml-5">
-            <li>
+            <li class="text-lg">
               <div class="list-disc">
                 {{ splitImplementacao(response[0].como_implementado).descricao }}
               </div>
@@ -46,16 +46,16 @@
         </div>
 
         <div class="mb-6 p-4 border-b border-gray-200 last:border-none">
-          <h4 class="text-lg font-semibold text-black mb-1">Indicadores relacionados:</h4>
+          <h4 class="text-xl font-semibold text-black mb-1">Indicadores relacionados:</h4>
           <ul class="text-gray-700 list-disc ml-5">
-            <li v-for="item in this.relacionados" :key="item">
+            <li class="text-lg" v-for="item in this.relacionados" :key="item">
               <button @click="indicadorRelacionado(item[0])" class="related-indicator-button hover:text-blue-500">{{ item[1] }}</button>
             </li>
           </ul>
         </div>
         
         <div class="mb-6 p-4 border-b border-gray-200 last:border-none">
-          <h4 class="text-lg font-semibold text-black mb-3">Referências</h4>
+          <h4 class="text-xl font-semibold text-black mb-3">Referências</h4>
           <ul class="text-gray-700 list-disc ml-5 space-y-2">
             <li v-for="(item) in splitRef(response[0].referencias, response[0].referencias_completas)" :key="item.url">
               <a :href="item.url" target="_blank" class="reference-tag text-blue-600 hover:underline p-4 text-sm">{{ item.titulo }}</a>
@@ -65,14 +65,17 @@
 
 
         <div v-if="response[0].imagens" class="mb-6 p-4 border-b border-gray-200 last:border-none">
-          <h4 class="text-lg font-semibold text-black mb-1">Possíveis visualizações:</h4>
+          <h4 class="text-xl font-semibold text-black mb-1">Possíveis visualizações:</h4>
           <div class="flex flex-col items-center space-x-4">
-            <img v-for="image in splitImages(response[0].imagens)" :key="image" :src="getImagePath(image)" :alt="image.trim()" class="h-64 mt-2 rounded-md shadow-md"/>
+            <div v-for="image in splitImages(response[0].imagens)" :key="image" class="flex flex-col items-center mt-2 mb-8">
+              <img :src="getImagePath(image)" :alt="image.trim()" class="h-64 rounded-md shadow-md"/>
+              <p class="mt-2 font-semibold text-gray-700">{{ getImageSource(image) }}</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div v-if="!value" class="flex justify-end mt-4">
+      <div v-if="!indicadorAdicionado()" class="flex justify-end mt-4">
         <button
           @click="adicionarAoCarrinho" 
           class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-8 rounded-md shadow-md relative flex items-center"
@@ -100,13 +103,21 @@ export default {
       value: false,
       id: null,
       detalhe: false,
+      carrinhoLista: '',
       response: [],
       teste: ['Incremente o valor por 1 cada vez que um jogador acessa a fase', 'numJogadores = numJogadores  + 1'],
       relacionados: []
     };
   },
+  watch: {
+    carrinhoLista() {
+      this.indicadorAdicionado()
+    }
+  },
   methods: {
-    async openModal(categoria, indicador, id, value) {
+    async openModal(categoria, indicador, id, carrinhoLista, value) {
+      console.log(carrinhoLista)
+      this.carrinhoLista = carrinhoLista
       console.log(categoria)
       this.modalOpen = true;
       this.categoria = categoria;
@@ -151,6 +162,13 @@ export default {
     getImagePath(image) {
       return new URL(`../assets/images/indicadores_imagens/${String(image).trim()}`, import.meta.url).href;
     },
+    getImageSource(image) {
+      const parts = image.split('-');
+      if (parts.length > 1) {
+        return parts[1].replace('.png', '').trim();
+      }
+      return image.replace('.png', '').trim();
+    },
     async indicadorRelacionado(id) {
       try {
         const response = await axios.get(`http://localhost:4000/indicadores/detalhe/${id}`);
@@ -182,6 +200,12 @@ export default {
           console.error('Erro ao obter os detalhes do indicador:', error);
         }
       }
+    },
+    indicadorAdicionado () {
+      console.log(this.carrinhoLista, this.indicador)
+      const resultado = this.carrinhoLista.some(item => item.indicador === this.indicador)
+      console.log('messi', resultado)
+      return resultado
     }
   }
 };

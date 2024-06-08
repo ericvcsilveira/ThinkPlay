@@ -61,23 +61,38 @@ app.post('/usuarios', (req, res) => {
         return res.status(400).json({ error: 'Nome, email e senha são obrigatórios' });
     }
 
-    // Consulta SQL para adicionar um novo usuário
-    const sql = 'INSERT INTO usuarios (nome, email, senha, ocupacao, data_nascimento, experiencia_gla, dica) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    // Consulta SQL para verificar se o e-mail já existe
+    const sqlVerificaEmail = 'SELECT COUNT(*) AS count FROM usuarios WHERE email = ?';
 
-    // Executar a consulta SQL para adicionar um novo usuário
-    db.run(sql, [nome, email, senha, ocupacao, data_nascimento, experiencia_gla, dica], function(err) {
+    db.get(sqlVerificaEmail, [email], (err, row) => {
         if (err) {
-            console.error('Erro ao adicionar o usuário:', err.message);
-            return res.status(500).json({ error: 'Erro ao adicionar o usuário' });
+            console.error('Erro ao verificar o e-mail:', err.message);
+            return res.status(500).json({ error: 'Erro ao verificar o e-mail' });
         }
 
-        // Obter o ID do novo usuário inserido
-        const novoUsuarioId = this.lastID;
+        if (row.count > 0) {
+            return res.status(400).json({ error: 'O e-mail já está em uso' });
+        }
 
-        // Retornar o novo usuário adicionado
-        res.status(201).json({ id: novoUsuarioId, nome, email, senha, ocupacao, data_nascimento, experiencia_gla });
+        // Consulta SQL para adicionar um novo usuário
+        const sql = 'INSERT INTO usuarios (nome, email, senha, ocupacao, data_nascimento, experiencia_gla, dica) VALUES (?, ?, ?, ?, ?, ?, ?)';
+
+        // Executar a consulta SQL para adicionar um novo usuário
+        db.run(sql, [nome, email, senha, ocupacao, data_nascimento, experiencia_gla, dica], function(err) {
+            if (err) {
+                console.error('Erro ao adicionar o usuário:', err.message);
+                return res.status(500).json({ error: 'Erro ao adicionar o usuário' });
+            }
+
+            // Obter o ID do novo usuário inserido
+            const novoUsuarioId = this.lastID;
+
+            // Retornar o novo usuário adicionado
+            res.status(201).json({ id: novoUsuarioId, nome, email, senha, ocupacao, data_nascimento, experiencia_gla });
+        });
     });
 });
+
 
 
 // Rota para atualizar um usuário pelo ID

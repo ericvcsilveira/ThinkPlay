@@ -40,12 +40,21 @@
             <label class="block text-gray-700 text-md font-bold mb-2" for="ocupacao">
               Ocupação
             </label>
-            <select v-model="ocupacao" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="ocupacao">
+            <select v-model="ocupacao" @change="checkOtherOption" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="ocupacao">
               <option value="" disabled selected>Selecione uma ocupação</option>
               <option value="Desenvolvedor de Jogos">Desenvolvedor de Jogos</option>
               <option value="Designer de Jogos">Designer de Jogos</option>
               <option value="Analista de Dados">Analista de Dados</option>
+              <option value="Estudante de Jogos">Estudante de Jogos</option>
+              <option value="Pesquisador de GLA">Pesquisador da área de Game Learning Analytics</option>
+              <option value="Outro">Outro</option>
             </select>
+            <div v-if="ocupacao === 'Outro'" class="mt-2">
+              <label class="block text-gray-700 text-md font-bold mb-2" for="outraOcupacao">
+                Por favor, especifique:
+              </label>
+              <input v-model="outraOcupacao" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="outraOcupacao" type="text" placeholder="Digite sua ocupação">
+            </div>
           </div>
           <div class="mb-4">
             <label class="block text-gray-700 text-md font-bold mb-2" for="dataNascimento">
@@ -82,80 +91,62 @@ export default {
       email: '',
       senha: '',
       ocupacao: '',
+      outraOcupacao: '',
       dataNascimento: '',
       experienciaGla: false,
       emailInvalido: false,
       senhaCurta: false,
       cadastrando: false,
-      userId: null
+      userId: null,
+      erro: ''
     };
   },
   methods: {
     async cadastrarUsuario() {
-      if (this.userId == 0){
-        try {
-          this.cadastrando = true;
-          const payload = {
-            nome: this.nome,
-            email: this.email,
-            senha: this.senha,
-            ocupacao: this.ocupacao,
-            data_nascimento: this.dataNascimento,
-            experiencia_gla: this.experienciaGla,
-            dica: 1
-          };
+      const payload = {
+        nome: this.nome,
+        email: this.email,
+        senha: this.senha,
+        ocupacao: this.ocupacao === 'Outro' ? this.outraOcupacao : this.ocupacao,
+        data_nascimento: this.dataNascimento,
+        experiencia_gla: this.experienciaGla,
+        dica: 1
+      };
+      
+      try {
+        this.cadastrando = true;
+        if (this.userId == 0){
           const response = await axios.post('http://localhost:4000/usuarios', payload, {
             headers: {
               'Content-Type': 'application/json',
             },
-          }).then(response => {
-            console.log('Usuário cadastrado:', response.data);
-            this.nome = '';
-            this.email = '';
-            this.senha = '';
-            this.ocupacao = '';
-            this.dataNascimento = '';
-            this.experienciaGla = false;
-            this.voltar()
-          }).catch(error => {
-              console.error('Erro ao excluir o projeto:', error);
           });
-        } catch (error) {
-          console.error('Erro ao cadastrar o usuário:', error);
-        } finally {
-          this.cadastrando = false;
-        }
-      } else {
-        try {
-          this.cadastrando = true;
-          const payload = {
-              nome: this.nome,
-              email: this.email,
-              senha: this.senha,
-              ocupacao: this.ocupacao,
-              data_nascimento: this.dataNascimento,
-              experiencia_gla: this.experienciaGla,
-          };
+          console.log(response);
+        } else {
           const response = await axios.put(`http://localhost:4000/usuarios/${this.userId}`, payload, {
-              headers: {
-                  'Content-Type': 'application/json',
-              },
+            headers: {
+              'Content-Type': 'application/json',
+            },
           });
-          console.log('Usuário atualizado:', response.data);
-          // Limpar os campos do formulário ou fazer qualquer outra ação necessária após a atualização bem-sucedida
-          this.nome = '';
-          this.email = '';
-          this.senha = '';
-          this.ocupacao = '';
-          this.dataNascimento = '';
-          this.experienciaGla = false;
-          this.voltar();
+        }
+
+        this.resetForm();
+        this.voltar();
       } catch (error) {
-          console.error('Erro ao atualizar o usuário:', error);
+        console.log(error.response.data.error)
+        alert(error.response.data.error)
       } finally {
-          this.cadastrando = false;
+        this.cadastrando = false;
       }
-      }
+    },
+    resetForm() {
+      this.nome = '';
+      this.email = '';
+      this.senha = '';
+      this.ocupacao = null;
+      this.outraOcupacao = '';
+      this.dataNascimento = '';
+      this.experienciaGla = false;
     },
     voltar() {
       if (this.userId == 0){
@@ -163,7 +154,6 @@ export default {
       } else {
         this.$router.push({path: `/projects/${this.userId}`});
       }
-      
     },
     validarEmail() {
       const regexEmail = /\S+@\S+\.\S+/;
@@ -172,19 +162,24 @@ export default {
     validarSenha() {
       this.senhaCurta = this.senha.length < 8;
     },
+    checkOtherOption() {
+      if (this.ocupacao !== 'Outro') {
+        this.outraOcupacao = '';
+      }
+    },
     async getUser () {
       try {
         const response = await axios.get(`http://localhost:4000/usuarios/${this.userId}`);
         const usuario = response.data;
-        this.nome = usuario.nome
-        this.email = usuario.email
-        this.senha = usuario.senha
-        this.ocupacao = usuario.ocupacao
-        this.dataNascimento = usuario.data_nascimento
-        if (usuario.experiencia_gla == true) {
-          this.experienciaGla = true
-        } else {
-          this.experienciaGla = false
+        this.nome = usuario.nome;
+        this.email = usuario.email;
+        this.senha = usuario.senha;
+        this.ocupacao = usuario.ocupacao;
+        this.dataNascimento = usuario.data_nascimento;
+        this.experienciaGla = usuario.experiencia_gla;
+        if (!['Desenvolvedor de Jogos', 'Designer de Jogos', 'Analista de Dados', 'Estudante de Jogos', 'Pesquisador de GLA'].includes(this.ocupacao)) {
+          this.outraOcupacao = this.ocupacao;
+          this.ocupacao = 'Outro';
         }
       } catch (error) {
         console.error('Erro ao verificar o usuário:', error);
@@ -195,11 +190,10 @@ export default {
   created() {
     this.userId = Number(this.$route.params.id);
     if (this.userId != 0){
-      this.getUser()
+      this.getUser();
     } else {
-      this.userId = 0
+      this.userId = 0;
     }
-
   }
 };
 </script>

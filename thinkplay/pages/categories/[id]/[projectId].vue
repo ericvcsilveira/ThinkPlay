@@ -38,7 +38,7 @@
           <button :disabled="carrinhoLista.length == 0" 
             @click="cadastrar" 
             class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-10 mb-12 text-lg rounded focus:outline-none focus:shadow-outline disabled:bg-gray-400 disabled:cursor-not-allowed">
-            Indicadores Selecionados
+            Ver Indicadores Selecionados
           </button>
         </div>
       </div>
@@ -61,12 +61,12 @@ export default {
   data() {
     return {
       categorias: [
-        { id: 1, nome: 'Completáveis', showDescription: false, descricao: 'Indicadores que refletem as ações repetíveis dos jogadores, como fases completadas, tentativas, e conquistas.' },
+        { id: 1, nome: 'Completáveis', showDescription: false, descricao: 'Indicadores que refletem as ações repetíveis dos jogadores, como fases completadas, tentativas, e acertos.' },
         { id: 6, nome: 'Curvas de Aprendizado', showDescription: false, descricao: 'Indicadores que mostram a evolução do desempenho dos jogadores ao longo do tempo, ajudando a identificar progressos e dificuldades.' },
-        { id: 7, nome: 'Dados de Dispositivos Externos', showDescription: false, descricao: 'Indicadores obtidos através de dispositivos externos, que ajudam a entender a atenção e as reações emocionais dos jogadores.' },
+        { id: 7, nome: 'Dados de Dispositivos Externos', showDescription: false, descricao: 'Indicadores obtidos através de dispositivos externos.' },
         { id: 5, nome: 'Dados de Fases', showDescription: false, descricao: 'Indicadores que fornecem informações sobre as fases do jogo, como quantas vezes uma fase foi jogada e se foi concluída.' },
         { id: 4, nome: 'Dados de Jogadores', showDescription: false, descricao: 'Indicadores que coletam informações sobre o desempenho e comportamento dos jogadores, como habilidades, estilo de jogo, e número de amigos.' },
-        { id: 3, nome: 'Experiência do usuário', showDescription: false, descricao: 'Indicadores que capturam como os jogadores interagem com a interface do jogo, incluindo cliques, seleções de menu, e engajamento.' },
+        { id: 3, nome: 'Experiência do Usuário', showDescription: false, descricao: 'Indicadores que capturam como os jogadores interagem com a interface do jogo, incluindo cliques, seleções de menu, e engajamento.' },
         { id: 2, nome: 'Rastreamento de Tempo', showDescription: false, descricao: 'Indicadores relacionados ao tempo gasto pelos jogadores em diferentes aspectos do jogo, como tempo em fases, tempo de inatividade, e horários de uso.' }
       ],
       carrinhoLista: [],
@@ -81,7 +81,7 @@ export default {
       this.$refs.modalComponent.openModal(categoria, this.carrinhoLista);
     },
     indicadorModal(categoria, indicador, id) {
-      this.$refs.indicadorModal.openModal(categoria, indicador, id);
+      this.$refs.indicadorModal.openModal(categoria, indicador, id, this.carrinhoLista);
     },
     carrinho(indicador, categoria, id) {
       const adicionado = this.carrinhoLista.some(item => item.indicador == indicador && item.categoria == categoria && item.id == id );
@@ -97,7 +97,7 @@ export default {
       this.$refs.carrinhoModal.openModal(this.carrinhoLista, this.usuario_id, this.project_id);
     },
     detalhes (categoria, indicador, id) {
-      this.$refs.indicadorModal.openModal(categoria, indicador, id, 1);
+      this.$refs.indicadorModal.openModal(categoria, indicador, id, this.carrinhoLista, 1);
     },
     detalhe (){
       this.$refs.carrinhoModal.openModal(this.carrinhoLista, this.usuario_id, this.project_id);
@@ -125,6 +125,9 @@ export default {
       }
     },
     getIndicatorCount(categoriaNome) {
+      console.log(categoriaNome)
+      console.log(this.carrinhoLista)
+      console.log(this.carrinhoLista.filter(item => item.categoria === categoriaNome).length)
       return this.carrinhoLista.filter(item => item.categoria === categoriaNome).length;
     }
   },

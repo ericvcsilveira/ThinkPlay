@@ -35,10 +35,14 @@
 
 
           <div class="flex justify-center mt-8">
-            <button :disabled="cadastrando" type="submit" class="bg-green-500 hover:bg-green-600 w-full text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            <button 
+              :disabled="this.publicoAlvo == '' || this.nome == '' || this.objetivo == '' " 
+              type="submit" 
+              class="w-full text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline  bg-green-500 hover:bg-green-600 disabled:bg-gray-500 disabled:cursor-not-allowed">
               {{ cadastrando ? 'Cadastrando...' : 'Cadastrar' }}
             </button>
           </div>
+
         </form>
       </div>
     </div>
@@ -65,40 +69,39 @@ export default {
   },
   methods: {
     async cadastrarProjeto() {
-  try {
-    this.cadastrando = true;
-    const currentDate = new Date().toISOString().split('T')[0]; // Obtém a data atual no formato 'yyyy-mm-dd'
-    const payload = {
-      nome: this.nome,
-      objetivo: this.objetivo,
-      publico_alvo: this.publicoAlvo,
-      usuario_id: this.userId, // Supondo que o ID do usuário seja 1
-      indicadores: null,
-      data_criacao: currentDate,
-    };
-    const response = await axios.post('http://localhost:4000/projetos', JSON.stringify(payload), {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(response => {
-      console.log('Projeto cadastrado:', response.data);
-      console.log(response.data.id)
-      this.projectId = response.data.id
-      this.nome = '';
-      this.objetivo = '';
-      this.publicoAlvo = '';
-      this.indicadores = ''; 
-      this.dataCriacao = '';
-      this.$router.push({path: `/categories/${this.userId}/${this.projectId}`});
-    }).catch(error => {
+      this.cadastrando = true;
+      const currentDate = new Date().toISOString().split('T')[0]; // Obtém a data atual no formato 'yyyy-mm-dd'
+      const payload = {
+        nome: this.nome,
+        objetivo: this.objetivo,
+        publico_alvo: this.publicoAlvo,
+        usuario_id: this.userId, // Supondo que o ID do usuário seja 1
+        indicadores: null,
+        data_criacao: currentDate,
+      };
+
+      try{
+        const response = await axios.post('http://localhost:4000/projetos', JSON.stringify(payload), {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+
+        console.log('Projeto cadastrado:', response.data);
+        console.log(response.data.id)
+        this.projectId = response.data.id
+        this.nome = '';
+        this.objetivo = '';
+        this.publicoAlvo = '';
+        this.indicadores = ''; 
+        this.dataCriacao = '';
+        this.$router.push({path: `/categories/${this.userId}/${this.projectId}`});
+      } catch(error) {
         console.error('Erro ao cadastrar o projeto:', error);
-    })
-  } catch (error) {
-    console.error('Erro ao cadastrar o projeto:', error);
-  } finally {
-    this.cadastrando = false;
-  }
-},
+      } finally {
+        this.cadastrando = false;
+      }
+    },
     voltar() {
       this.$router.push({path: `/projects/${this.userId}`});
     }
