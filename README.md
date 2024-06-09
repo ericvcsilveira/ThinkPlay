@@ -1,7 +1,19 @@
-# Nuxt 3 Minimal Starter
+# Configuração do Ambiente ThinkPlay
 
-Instalar o Nuxt e suas dependências
-## Setup
+## Pré-requisitos
+
+Antes de começar, certifique-se de ter o Node.js instalado em sua máquina. A versão utilizada é v20.10.0.
+
+## Passos para Configuração
+
+1. **Clone o repositório e entre na pasta `thinkplay`**
+
+```bash
+git clone https://github.com/ericvcsilveira/ThinkPlay
+cd thinkplay
+```
+
+2. **Instale as dependências do Nuxt**
 
 ```bash
 # npm
@@ -17,9 +29,9 @@ yarn install
 bun install
 ```
 
-## Development Server
+3. **Inicie o servidor de desenvolvimento**
 
-Iniciar o servidor de desenvolvimento (localhost:3000)
+Para iniciar o servidor de desenvolvimento em localhost:3000, use um dos seguintes comandos:
 
 ```bash
 # npm
@@ -35,12 +47,10 @@ yarn dev
 bun run dev
 ```
 
-Inicializar o banco de dados (localhost:4000)
+4. **Inicialize o banco de dados local**
 
+Para iniciar o banco de dados local em localhost:4000, execute o comando:
+
+```bash
 node server.js
-
-Utilizar o banco de dados
-
-sqlite3 databse.db
-
-Caso houver alguma alteração no tabela_banco.csv, executar arquivo saveSql.py, que atualizará o arquivo database.db
+```

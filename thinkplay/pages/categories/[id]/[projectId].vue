@@ -63,7 +63,7 @@ export default {
       categorias: [
         { id: 1, nome: 'Completáveis', showDescription: false, descricao: 'Indicadores que refletem as ações repetíveis dos jogadores, como fases completadas, tentativas, e acertos.' },
         { id: 6, nome: 'Curvas de Aprendizado', showDescription: false, descricao: 'Indicadores que mostram a evolução do desempenho dos jogadores ao longo do tempo, ajudando a identificar progressos e dificuldades.' },
-        { id: 7, nome: 'Dados de Dispositivos Externos', showDescription: false, descricao: 'Indicadores obtidos através de dispositivos externos.' },
+        { id: 7, nome: 'Dados que Precisam de Outros Dispositivos', showDescription: false, descricao: 'Indicadores obtidos através de dispositivos externos.' },
         { id: 5, nome: 'Dados de Fases', showDescription: false, descricao: 'Indicadores que fornecem informações sobre as fases do jogo, como quantas vezes uma fase foi jogada e se foi concluída.' },
         { id: 4, nome: 'Dados de Jogadores', showDescription: false, descricao: 'Indicadores que coletam informações sobre o desempenho e comportamento dos jogadores, como habilidades, estilo de jogo, e número de amigos.' },
         { id: 3, nome: 'Experiência do Usuário', showDescription: false, descricao: 'Indicadores que capturam como os jogadores interagem com a interface do jogo, incluindo cliques, seleções de menu, e engajamento.' },

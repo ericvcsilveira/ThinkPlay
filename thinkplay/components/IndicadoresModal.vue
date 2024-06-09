@@ -83,11 +83,11 @@ export default {
       const categorias = {
         'Completáveis': 1,
         'Rastreamento de Tempo': 2,
-        'Experiência do usuário': 3,
+        'Experiência do Usuário': 3,
         'Dados de Jogadores': 4,
         'Dados de Fases': 5,
         'Curvas de Aprendizado': 6,
-        'Dados de Dispositivos Externos': 7
+        'Dados que Precisam de Outros Dispositivos': 7
       };
 
       if (categoria in categorias) {
