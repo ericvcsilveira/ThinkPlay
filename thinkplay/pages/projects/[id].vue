@@ -67,7 +67,7 @@
             </tr>
           </tbody>
         </table>
-        <div class="flex justify-end mt-8">
+        <div class="flex justify-center mt-8">
           <button @click="createProject" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
             Novo Projeto
           </button>
