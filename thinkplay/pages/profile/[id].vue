@@ -64,7 +64,7 @@
           </div>
           <div class="mb-4 flex">
             <label for="experienciaGla" class="block text-gray-700">Experiência GLA:</label>
-            <input type="checkbox" id="experienciaGla" v-model="experienciaGla" class="mx-4" />
+            <input type="checkbox" id="experienciaGla" v-model="experienciaGla" :checked="experienciaGla" class="mx-4" />
           </div>
 
           <div class="flex justify-center mt-8">
