@@ -70,7 +70,8 @@ export default {
   methods: {
     async cadastrarProjeto() {
       this.cadastrando = true;
-      const currentDate = new Date().toISOString().split('T')[0]; // Obtém a data atual no formato 'yyyy-mm-dd'
+      const currentDate = new Date().toLocaleDateString('en-CA');7
+      console.log(currentDate)
       const payload = {
         nome: this.nome,
         objetivo: this.objetivo,

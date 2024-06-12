@@ -49,7 +49,6 @@ export default {
     };
   },
   watch: {
-    // Monitora a mudança na categoria escolhida e atualiza os indicadores
     categoria(newValue) {
       if (newValue) {
         this.categoria = newValue;
@@ -68,10 +67,8 @@ export default {
     },
     async carregarIndicadores(categoria) {
       try {
-        // Mapear a categoria para o código de categoria correspondente
         const codigo_categoria = this.mapCategoriaParaCodigo(categoria);
 
-        // Fazer a requisição para buscar os indicadores com base no código de categoria
         const response = await fetch(`http://localhost:4000/indicadores/${codigo_categoria}`);
         const data = await response.json();
         this.indicadores = data;

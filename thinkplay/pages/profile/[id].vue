@@ -63,7 +63,7 @@
             <input v-model="dataNascimento" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="dataNascimento" type="date">
           </div>
           <div class="mb-4 flex">
-            <label for="experienciaGla" class="block text-gray-700">Experiência GLA:</label>
+            <label for="experienciaGla" class="block text-gray-700">Experiência com Game Learning Analytics (GLA):</label>
             <input type="checkbox" id="experienciaGla" v-model="experienciaGla" :checked="experienciaGla" class="mx-4" />
           </div>
 

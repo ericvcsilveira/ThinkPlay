@@ -9,7 +9,6 @@ const port = 4000;
 app.use(cors());
 app.use(bodyParser.json());
 
-// Conexão com o banco de dados SQLite
 const db = new sqlite3.Database('./database.db', (err) => {
     if (err) {
         console.error('Erro ao conectar ao banco de dados:', err.message);
@@ -18,7 +17,6 @@ const db = new sqlite3.Database('./database.db', (err) => {
     }
 });
 
-// Rota para obter todos os usuários
 app.get('/usuarios', (req, res) => {
     db.all('SELECT * FROM usuarios', (err, rows) => {
         if (err) {
@@ -30,7 +28,6 @@ app.get('/usuarios', (req, res) => {
     });
 });
 
-// Rota para obter um usuário pelo ID
 app.get('/usuarios/:id', (req, res) => {
     const userId = req.params.id;
     const query = 'SELECT * FROM usuarios WHERE id = ?';
@@ -41,10 +38,8 @@ app.get('/usuarios/:id', (req, res) => {
             res.status(500).json({ error: 'Erro ao consultar o usuário' });
         } else {
             if (row) {
-                // Se o usuário existir, retornar suas informações
                 res.json(row);
             } else {
-                // Se o usuário não for encontrado, retornar um status 404
                 res.status(404).json({ error: 'Usuário não encontrado' });
             }
         }
@@ -52,16 +47,13 @@ app.get('/usuarios/:id', (req, res) => {
 });
 
 
-// Rota para adicionar um novo usuário
 app.post('/usuarios', (req, res) => {
     const { nome, email, senha, ocupacao, data_nascimento, experiencia_gla, dica } = req.body;
 
-    // Verificar se os campos obrigatórios foram fornecidos
     if (!nome || !email || !senha) {
         return res.status(400).json({ error: 'Nome, email e senha são obrigatórios' });
     }
 
-    // Consulta SQL para verificar se o e-mail já existe
     const sqlVerificaEmail = 'SELECT COUNT(*) AS count FROM usuarios WHERE email = ?';
 
     db.get(sqlVerificaEmail, [email], (err, row) => {
@@ -74,20 +66,16 @@ app.post('/usuarios', (req, res) => {
             return res.status(400).json({ error: 'O e-mail já está em uso' });
         }
 
-        // Consulta SQL para adicionar um novo usuário
         const sql = 'INSERT INTO usuarios (nome, email, senha, ocupacao, data_nascimento, experiencia_gla, dica) VALUES (?, ?, ?, ?, ?, ?, ?)';
 
-        // Executar a consulta SQL para adicionar um novo usuário
         db.run(sql, [nome, email, senha, ocupacao, data_nascimento, experiencia_gla, dica], function(err) {
             if (err) {
                 console.error('Erro ao adicionar o usuário:', err.message);
                 return res.status(500).json({ error: 'Erro ao adicionar o usuário' });
             }
 
-            // Obter o ID do novo usuário inserido
             const novoUsuarioId = this.lastID;
 
-            // Retornar o novo usuário adicionado
             res.status(201).json({ id: novoUsuarioId, nome, email, senha, ocupacao, data_nascimento, experiencia_gla });
         });
     });
@@ -95,33 +83,26 @@ app.post('/usuarios', (req, res) => {
 
 
 
-// Rota para atualizar um usuário pelo ID
 app.put('/usuarios/:id', (req, res) => {
     const userId = req.params.id;
     const { nome, email, senha, ocupacao, data_nascimento, experiencia_gla } = req.body;
 
-    // Verificar se os campos obrigatórios foram fornecidos
     if (!nome || !email || !senha) {
         return res.status(400).json({ error: 'Nome, email e senha são obrigatórios' });
     }
 
-    // Consulta SQL para atualizar um usuário existente
     const sql = 'UPDATE usuarios SET nome = ?, email = ?, senha = ?, ocupacao = ?, data_nascimento = ?, experiencia_gla = ? WHERE id = ?';
 
-    // Executar a consulta SQL para atualizar o usuário
     db.run(sql, [nome, email, senha, ocupacao, data_nascimento, experiencia_gla, userId], function(err) {
         if (err) {
             console.error('Erro ao atualizar o usuário:', err.message);
             return res.status(500).json({ error: 'Erro ao atualizar o usuário' });
         }
 
-        // Verificar se algum usuário foi afetado pela atualização
         if (this.changes === 0) {
-            // Se nenhum usuário foi afetado, significa que o usuário com o ID fornecido não foi encontrado
             return res.status(404).json({ error: 'Usuário não encontrado' });
         }
 
-        // Se a atualização for bem-sucedida, retornar os detalhes do usuário atualizado
         res.json({
             id: userId,
             nome,
@@ -136,13 +117,10 @@ app.put('/usuarios/:id', (req, res) => {
 
 
 app.get('/projetos/:usuario_id', (req, res) => {
-    // Extrair o ID do usuário dos parâmetros da requisição
     const { usuario_id } = req.params;
 
-    // Consulta SQL para obter todos os projetos do usuário específico
     const sql = 'SELECT * FROM projetos WHERE usuario_id = ?';
 
-    // Executar a consulta SQL para obter os projetos do usuário específico
     db.all(sql, [usuario_id], (err, rows) => {
         if (err) {
             console.error('Erro ao consultar os projetos do usuário:', err.message);
@@ -154,13 +132,10 @@ app.get('/projetos/:usuario_id', (req, res) => {
 });
 
 app.get('/projetos/nome/:projeto_id', (req, res) => {
-    // Extrair o ID do usuário dos parâmetros da requisição
     const { projeto_id } = req.params;
 
-    // Consulta SQL para obter todos os projetos do usuário específico
     const sql = 'SELECT * FROM projetos WHERE id = ?';
 
-    // Executar a consulta SQL para obter os projetos do usuário específico
     db.all(sql, [projeto_id], (err, rows) => {
         if (err) {
             console.error('Erro ao consultar os projetos do usuário:', err.message);
@@ -183,7 +158,6 @@ app.get('/indicadores/:codigo_categoria', (req, res) => {
             return;
         }
 
-        // Retorna os resultados da consulta
         res.json(rows);
     });
 });
@@ -199,55 +173,44 @@ app.get('/indicadores/detalhe/:id', (req, res) => {
             return;
         }
 
-        // Retorna os resultados da consulta
         res.json(rows);
     });
 });
 
 
 
-// Rota para adicionar um novo projeto
 app.post('/projetos', (req, res) => {
     const { nome, objetivo, publico_alvo, usuario_id, indicadores, data_criacao } = req.body;
 
-    // Verificar se todos os campos necessários foram fornecidos
     if (!nome || !objetivo || !publico_alvo || !usuario_id || !data_criacao) {
         return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
     }
 
-    // Consulta SQL para adicionar um novo projeto
     const sql = 'INSERT INTO projetos (nome, objetivo, publico_alvo, usuario_id, indicadores, data_criacao) VALUES (?, ?, ?, ?, ?, ?)';
 
-    // Executar a consulta SQL para adicionar um novo projeto
     db.run(sql, [nome, objetivo, publico_alvo, usuario_id, indicadores, data_criacao], function(err) {
         if (err) {
             console.error('Erro ao adicionar o projeto:', err.message);
             return res.status(500).json({ error: 'Erro ao adicionar o projeto' });
         }
 
-        // Obter o ID do novo projeto inserido
         const novoProjetoId = this.lastID;
 
-        // Retornar o novo projeto adicionado
         res.status(201).json({ id: novoProjetoId, nome, objetivo, publico_alvo, usuario_id, indicadores, data_criacao });
     });
 });
 
 
-// Rota para excluir um projeto pelo ID
 app.delete('/projetos/:id', (req, res) => {
     const projetoId = req.params.id;
 
-    // Consulta SQL para excluir o projeto com o ID fornecido
     const sql = 'DELETE FROM projetos WHERE id = ?';
 
-    // Executar a consulta SQL com o ID do projeto como parâmetro
     db.run(sql, [projetoId], function(err) {
         if (err) {
             console.error('Erro ao excluir o projeto:', err.message);
             res.status(500).json({ error: 'Erro ao excluir o projeto' });
         } else {
-            // Verificar se alguma linha foi afetada (se o projeto foi excluído com sucesso)
             if (this.changes > 0) {
                 res.status(200).json({ message: 'Projeto excluído com sucesso' });
             } else {
@@ -303,7 +266,6 @@ function updateProjetoIndicadoresJson(projetoId, indicadores) {
     });
 }
 
-// Rota para atualizar os indicadores de um projeto
 app.put('/projetos/:id/indicadores', async (req, res) => {
     const projetoId = req.params.id;
     const { indicadores } = req.body;
@@ -322,11 +284,9 @@ app.put('/projetos/:id/indicadores', async (req, res) => {
 });
 
 
-// Rota para obter os indicadores de um projeto específico de um usuário específico
 app.get('/indicadores/:userId/:projectId', (req, res) => {
     const { userId, projectId } = req.params;
 
-    // Consulta SQL para obter os indicadores de um projeto específico de um usuário específico
     const sql = `
         SELECT i.id, i.nome AS indicador, i.categoria
         FROM indicadores i
@@ -335,13 +295,11 @@ app.get('/indicadores/:userId/:projectId', (req, res) => {
         WHERE p.usuario_id = ? AND p.id = ?
     `;
 
-    // Executar a consulta SQL
     db.all(sql, [userId, projectId], (err, rows) => {
         if (err) {
             console.error('Erro ao consultar os indicadores:', err.message);
             res.status(500).json({ error: 'Erro ao consultar os indicadores' });
         } else {
-            // Mapear os resultados para o formato solicitado
             const result = rows.map(row => ({
                 id: row.id,
                 indicador: row.indicador,
@@ -352,7 +310,6 @@ app.get('/indicadores/:userId/:projectId', (req, res) => {
     });
 });
 
-// Rota para obter um indicador pelo nome
 app.get('/indicadores/nome/:nome', (req, res) => {
     const indicadorNome = req.params.nome;
     const sql = 'SELECT * FROM indicadores WHERE nome = ?';
@@ -365,44 +322,35 @@ app.get('/indicadores/nome/:nome', (req, res) => {
         }
 
         if (rows.length > 0) {
-            // Retorna a primeira ocorrência encontrada do indicador com o nome fornecido
             res.json(rows[0]);
         } else {
-            // Se nenhum indicador for encontrado com o nome fornecido, retorna um erro 404
             res.status(404).json({ error: 'Indicador não encontrado' });
         }
     });
 });
 
 
-// Rota para atualizar o atributo 'dica' de um usuário pelo ID
 app.put('/usuarios/dica/:id', (req, res) => {
     const userId = req.params.id;
 
-    // Consulta SQL para atualizar o atributo 'dica' do usuário para 0
     const sql = 'UPDATE usuarios SET dica = 0 WHERE id = ?';
 
-    // Executar a consulta SQL para atualizar o atributo 'dica'
     db.run(sql, [userId], function(err) {
         if (err) {
             console.error('Erro ao atualizar o atributo dica do usuário:', err.message);
             return res.status(500).json({ error: 'Erro ao atualizar o atributo dica do usuário' });
         }
 
-        // Verificar se algum usuário foi afetado pela atualização
         if (this.changes === 0) {
-            // Se nenhum usuário foi afetado, significa que o usuário com o ID fornecido não foi encontrado
             return res.status(404).json({ error: 'Usuário não encontrado' });
         }
 
-        // Se a atualização for bem-sucedida, retornar uma mensagem de sucesso
         res.json({ message: 'Atributo dica do usuário atualizado com sucesso' });
     });
 });
 
 
 
-// Iniciar o servidor
 app.listen(port, () => {
     console.log(`Servidor backend está ouvindo em http://localhost:${port}`);
 });
