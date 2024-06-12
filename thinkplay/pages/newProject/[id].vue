@@ -71,7 +71,6 @@ export default {
     async cadastrarProjeto() {
       this.cadastrando = true;
       const currentDate = new Date().toLocaleDateString('en-CA');7
-      console.log(currentDate)
       const payload = {
         nome: this.nome,
         objetivo: this.objetivo,
@@ -88,8 +87,6 @@ export default {
           }
         })
 
-        console.log('Projeto cadastrado:', response.data);
-        console.log(response.data.id)
         this.projectId = response.data.id
         this.nome = '';
         this.objetivo = '';

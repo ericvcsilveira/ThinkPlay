@@ -58,7 +58,6 @@ export default {
         if (usuario) {
           id = usuario.id
         }
-        console.log(id)
 
         if (usuario) {
           this.$router.push({path: `/projects/${usuario.id}`});

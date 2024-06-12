@@ -119,15 +119,11 @@ export default {
             categoria: indicador.categoria.trim()
           }));
         }
-        console.log(this.carrinhoLista)
       } catch (error) {
         console.error('Erro ao obter os indicadores:', error);
       }
     },
     getIndicatorCount(categoriaNome) {
-      console.log(categoriaNome)
-      console.log(this.carrinhoLista)
-      console.log(this.carrinhoLista.filter(item => item.categoria === categoriaNome).length)
       return this.carrinhoLista.filter(item => item.categoria === categoriaNome).length;
     }
   },

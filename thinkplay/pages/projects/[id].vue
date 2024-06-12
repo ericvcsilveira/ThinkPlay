@@ -103,7 +103,6 @@ export default {
     deleteProject(id) {
       axios.delete(`http://localhost:4000/projetos/${id}`)
         .then(response => {
-          console.log(response.data); 
           this.getProjetos(this.userId);
         })
         .catch(error => {
@@ -175,7 +174,6 @@ export default {
       }
     },
     formatDate(dateString) {
-      console.log('data', dateString);
       const date = new Date(dateString);
       date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
       const options = { year: 'numeric', month: 'long', day: 'numeric' };

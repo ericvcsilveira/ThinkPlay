@@ -121,7 +121,6 @@ export default {
               'Content-Type': 'application/json',
             },
           });
-          console.log(response);
         } else {
           const response = await axios.put(`http://localhost:4000/usuarios/${this.userId}`, payload, {
             headers: {
@@ -133,7 +132,6 @@ export default {
         this.resetForm();
         this.voltar();
       } catch (error) {
-        console.log(error.response.data.error)
         alert(error.response.data.error)
       } finally {
         this.cadastrando = false;

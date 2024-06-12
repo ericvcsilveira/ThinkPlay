@@ -123,13 +123,11 @@ export default {
             categoria: indicador.categoria.trim()
           }))
         }
-        console.log(payload)
         const response = await axios.put(`http://localhost:4000/projetos/${projetoId}/indicadores`, payload, {
           headers: {
             'Content-Type': 'application/json'
           }
         });
-        console.log('Indicadores atualizados:', response.data);
         this.$router.push({path: `/projects/${this.usuario_id}`});
       } catch (error) {
         console.error('Erro ao atualizar os indicadores:', error);

@@ -116,9 +116,7 @@ export default {
   },
   methods: {
     async openModal(categoria, indicador, id, carrinhoLista, value) {
-      console.log(carrinhoLista)
       this.carrinhoLista = carrinhoLista
-      console.log(categoria)
       this.modalOpen = true;
       this.categoria = categoria;
       this.indicador = indicador;
@@ -144,7 +142,6 @@ export default {
       this.modalOpen = false;
     },
     adicionarAoCarrinho() {
-      console.log('Adicionado ao carrinho:', this.indicador, this.id);
       this.closeModal();
       this.$emit('carrinho', this.indicador, this.categoria, this.id);
     },
@@ -174,8 +171,6 @@ export default {
         const response = await axios.get(`http://localhost:4000/indicadores/detalhe/${id}`);
         this.response = response.data;
         const categoria = this.response[0].categoria.trim()
-        console.log(this.response[0])
-        console.log(this.response[0].categoria)
         this.closeModal()
         this.$emit('relacionado', categoria, this.response[0].nome, this.response[0].id)
         
@@ -191,7 +186,6 @@ export default {
       this.relacionados = []
       const numeros = id.split(/[^0-9]+/)
       for (const indicadorRelacionado of numeros) {
-        console.log('num', indicadorRelacionado)
         try {
           const relacionado = await axios.get(`http://localhost:4000/indicadores/detalhe/${indicadorRelacionado}`);
           const nome = relacionado.data[0].nome;
@@ -202,9 +196,7 @@ export default {
       }
     },
     indicadorAdicionado () {
-      console.log(this.carrinhoLista, this.indicador)
       const resultado = this.carrinhoLista.some(item => item.indicador === this.indicador)
-      console.log('messi', resultado)
       return resultado
     }
   }
