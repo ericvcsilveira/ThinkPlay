@@ -95,7 +95,6 @@ export default {
       }
     },
     abrirIndicadorModal(nome, id) {
-      this.closeModal();
       this.$emit('indicadorModal', this.categoria, nome, id);
     },
     estaNoCarrinho(indicadorNome) {
