@@ -34,3 +34,9 @@ Para iniciar o banco de dados local em localhost:4000, abra outro terminal, entr
 ```bash
 node server.js
 ```
+
+5. **Após colocar o ambiente em execução, tente realizar as tarefas listadas no arquivo `Roteiro de Tarefas ThinkPlay.pdf`**
+
+6. **Ao finalizar as tarefas e o uso do sistema, por favor, responda o Formulário de Validação da Ferramenta Educacional "ThinkPlay" no link:**
+
+https://docs.google.com/forms/d/e/1FAIpQLSeF6h4sbcFWEDoTAjQemQTu96BI7QrvU-D7Du5gWy_saKt04Q/viewform?usp=sf_link
