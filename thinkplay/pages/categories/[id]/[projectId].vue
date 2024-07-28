@@ -30,7 +30,7 @@
                 <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="2" fill="none"/>
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M9 5.333c0-.736.597-1.333 1.333-1.333.736 0 1.333.597 1.333 1.333 0 .736-.597 1.333-1.333 1.333-.736 0-1.333-.597-1.333-1.333zm1 8c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-4.25c0-.414.336-.75.75-.75s.75.336.75.75V13.333z" fill="currentColor"/>
               </svg>
-              <span class="ml-2">Ver mais</span>
+              <span class="ml-2">Ver indicadores</span>
             </button>
           </div>
         </div>
